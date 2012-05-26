@@ -84,7 +84,7 @@ class BaseNormalizedDict(dict):
     
     @normalize_key
     def pop(self, key, *args):
-        return super(BaseNormalizedDict, self).get(key, *args)
+        return super(BaseNormalizedDict, self).pop(key, *args)
 
 
 class NormalizedDict(BaseNormalizedDict): # XXX: Broken
