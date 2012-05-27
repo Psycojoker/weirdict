@@ -5,7 +5,7 @@ with open('README.txt') as f:
 
 setup(
     name='weirdict',
-    version='0.2.0',
+    version='0.2.1',
     author='Baptiste Mispelon',
     author_email='bmispelon@gmail.com',
     packages=['weirdict'],
