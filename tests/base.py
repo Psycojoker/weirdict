@@ -1,5 +1,8 @@
 import unittest
-from weirdict import BaseNormalizedDict
+from weirdict import AbstractNormalizedDict
+
+class BaseNormalizedDict(AbstractNormalizedDict):
+    keyfunc = staticmethod(lambda s: s)
 
 class BaseTestCase(unittest.TestCase):
     def setUp(self):
@@ -60,9 +63,19 @@ class BaseTestCase(unittest.TestCase):
         self.assertEqual(self.d.get('bar', 'baz'), 'baz')
     
     def test_pop(self):
-        self.assertEqual(self.d.pop('foo'), 'bar')
-        self.assertRaises(KeyError, self.d.pop, ('foo',))
+        val = self.d.pop('foo')
+        self.assertEqual(val, 'bar')
+        with self.assertRaises(KeyError):
+            self.d['foo']
+    
+    def test_pop_keyerror(self):
+        self.assertRaises(KeyError, self.d.pop, 'bar')
     
     def test_pop_default(self):
-        self.assertRaises(KeyError, self.d.pop, ('bar',))
         self.assertEqual(self.d.pop('bar', 'baz'), 'baz')
+    
+    def test_setdefault(self):
+        self.d.setdefault('foo', 'baz')
+        self.d.setdefault('bar', 'baz')
+        self.assertEqual(self.d['foo'], 'bar')
+        self.assertEqual(self.d['bar'], 'baz')
