@@ -69,7 +69,7 @@ class AbstractNormalizedDict(MutableMapping):
 
     @classmethod
     def fromkeys(cls, seq, value=None):
-        return type(self)(izip(seq, repeat(value)))
+        return cls(izip(seq, repeat(value)))
 
     def __cmp__(self, other):
         return cmp(self._dict, other)

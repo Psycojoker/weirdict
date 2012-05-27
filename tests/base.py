@@ -1,29 +1,33 @@
 import unittest
 from weirdict import AbstractNormalizedDict
 
-class BaseNormalizedDict(AbstractNormalizedDict):
+class SimpleNormalizedDict(AbstractNormalizedDict):
     keyfunc = staticmethod(lambda s: s)
 
 class BaseTestCase(unittest.TestCase):
     def setUp(self):
-        self.empty = BaseNormalizedDict()
-        self.d = BaseNormalizedDict(foo='bar')
+        self.empty = SimpleNormalizedDict()
+        self.d = SimpleNormalizedDict(foo='bar')
     
     def test_init(self):
-        BaseNormalizedDict()
-        BaseNormalizedDict(foo='bar')
-        BaseNormalizedDict({'foo': 'bar'})
-        BaseNormalizedDict([('foo', 'bar')])
-        BaseNormalizedDict({'foo': 'bar'}, bar='baz')
-        BaseNormalizedDict({'foo': 'bar'}, bar='baz', baz='quux')
-        BaseNormalizedDict([('foo', 'bar')], bar='baz')
-        BaseNormalizedDict([('foo', 'bar')], bar='baz', baz='quux')
+        SimpleNormalizedDict()
+        SimpleNormalizedDict(foo='bar')
+        SimpleNormalizedDict({'foo': 'bar'})
+        SimpleNormalizedDict([('foo', 'bar')])
+        SimpleNormalizedDict({'foo': 'bar'}, bar='baz')
+        SimpleNormalizedDict({'foo': 'bar'}, bar='baz', baz='quux')
+        SimpleNormalizedDict([('foo', 'bar')], bar='baz')
+        SimpleNormalizedDict([('foo', 'bar')], bar='baz', baz='quux')
     
     def test_contains(self):
         self.assertIn('foo', self.d)
     
     def test_ncontains(self):
         self.assertNotIn('bar', self.d)
+    
+    def test_haskey(self):
+        self.assertTrue(self.d.has_key('foo'))
+        self.assertFalse(self.d.has_key('bar'))
     
     def test_len(self):
         self.assertEqual(len(self.empty), 0)
@@ -79,3 +83,12 @@ class BaseTestCase(unittest.TestCase):
         self.d.setdefault('bar', 'baz')
         self.assertEqual(self.d['foo'], 'bar')
         self.assertEqual(self.d['bar'], 'baz')
+    
+    def test_fromkeys(self):
+        d = SimpleNormalizedDict.fromkeys(['foo'])
+        self.assertIn('foo', d)
+        self.assertIsNone(d['foo'])
+    
+    def test_fromkeys_value(self):
+        d = SimpleNormalizedDict.fromkeys(['foo'], 'bar')
+        self.assertEqual(d['foo'], 'bar')

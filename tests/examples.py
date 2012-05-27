@@ -33,6 +33,10 @@ class CaseInsensitiveTestCase(unittest.TestCase):
     def test_setdefault(self):
         self.d.setdefault('FOO', 'baz')
         self.assertEqual(self.d['foo'], 'bar')
+    
+    def test_fromkeys(self):
+        d = CaseInsensitiveDict.fromkeys(['foo'], 'bar')
+        self.assertEqual(d['FOO'], 'bar')
 
 
 class TruncatedTestCase(unittest.TestCase):
