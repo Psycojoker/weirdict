@@ -14,6 +14,9 @@ Examples
 
 The example classes provided include:
 
+* A dict whose normalization function can be passed in the constructor (and
+  changed on-the-fly),
+
 * A case-insensitive dict,
 
 * a dict whose keys are truncated to a given length,

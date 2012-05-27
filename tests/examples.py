@@ -1,5 +1,19 @@
 import unittest
-from weirdict.examples import CaseInsensitiveDict, TruncatedKeyDict, ModuloKeyDict
+from weirdict.decorators import lenient
+from weirdict.examples import NormalizedDict, CaseInsensitiveDict, TruncatedKeyDict, ModuloKeyDict
+
+
+class NormalizedDicTestCase(unittest.TestCase):
+    def setUp(self):
+        self.ci = NormalizedDict(lenient(lambda s: s.lower()), foo='bar')
+    
+    def test_basic(self):
+        self.assertEqual(self.ci['FOO'], 'bar')
+    
+    def test_change_keyfunc(self):
+        self.ci.keyfunc = lenient(lambda s: s.upper())
+        self.assertNotIn('foo', dict(self.ci))
+        self.assertIn('FOO', dict(self.ci))
 
 
 class CaseInsensitiveTestCase(unittest.TestCase):

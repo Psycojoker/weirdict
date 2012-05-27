@@ -2,6 +2,32 @@ from .base import AbstractNormalizedDict
 from .decorators import lenient
 
 
+class NormalizedDict(AbstractNormalizedDict):
+    """A normalized dict where the keyfunc is passed in the constructor.
+    
+    The keyfunc can also be changed on-the-fly.
+    
+    """
+    def __init__(self, keyfunc, *args, **kwargs):
+        self._keyfunc = keyfunc
+        super(NormalizedDict, self).__init__(*args, **kwargs)
+
+    def copy(self):
+        return type(self)(self.keyfunc, self.iteritems())
+
+    @property
+    def keyfunc(self):
+        return self._keyfunc
+    
+    @keyfunc.setter
+    def keyfunc(self, new_keyfunc):
+        old = self.items()
+        self.clear()
+        self._keyfunc = new_keyfunc
+        self.update(old)
+        return new_keyfunc
+
+
 class CaseInsensitiveDict(AbstractNormalizedDict):
     """A dict whose string keys are case-insensitive."""
     @staticmethod

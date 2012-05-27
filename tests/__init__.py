@@ -1,2 +1,2 @@
 from .base import BaseTestCase
-from .examples import CaseInsensitiveTestCase, TruncatedTestCase, ModuloTestCase
+from .examples import NormalizedDicTestCase, CaseInsensitiveTestCase, TruncatedTestCase, ModuloTestCase
