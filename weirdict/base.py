@@ -1,4 +1,4 @@
-from abc import abstractproperty
+from abc import abstractmethod
 from collections import MutableMapping, Mapping
 from .decorators import apply_keyfunc
 from functools import total_ordering
@@ -13,13 +13,19 @@ class AbstractNormalizedDict(MutableMapping):
     """A dictionary where keys are normalized through a given function
     before being inserted in the dict.
     
+    All of dict's methods have been implemented so it should be possible to use
+    it as a drop-in replacement.
+    
+    Subclasses should define a keyfunc method that takes one argument
+    (a key to be inserted/retrieved/deleted) and return a normalized version of it.
+    
     """
-    @abstractproperty
-    def keyfunc(self):
+    @abstractmethod
+    def keyfunc(self, key):
         pass
 
     def __init__(self, map_or_seq=_SENTINEL, **kwargs):
-        """Normalize the keys before delegating to the parent's constructor.
+        """Normalize the keys before inserting them in the internal dictionary.
         The signature is (hopefully) the same as the one for dict.
         
         """
