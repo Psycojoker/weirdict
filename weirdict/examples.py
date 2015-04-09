@@ -13,7 +13,7 @@ class NormalizedDict(AbstractNormalizedDict):
         super(NormalizedDict, self).__init__(*args, **kwargs)
 
     def copy(self):
-        return type(self)(self.keyfunc, self.iteritems())
+        return type(self)(self.keyfunc, iter(self.items()))
 
     @property
     def keyfunc(self):
@@ -21,7 +21,7 @@ class NormalizedDict(AbstractNormalizedDict):
     
     @keyfunc.setter
     def keyfunc(self, new_keyfunc):
-        old = self.items()
+        old = list(self.items())
         self.clear()
         self._keyfunc = new_keyfunc
         self.update(old)
@@ -43,7 +43,7 @@ class TruncatedKeyDict(AbstractNormalizedDict):
         super(TruncatedKeyDict, self).__init__(*args, **kwargs)
 
     def copy(self):
-        return type(self)(self.key_length, self.iteritems())
+        return type(self)(self.key_length, iter(self.items()))
 
     @property
     def key_length(self):
@@ -65,7 +65,7 @@ class ModuloKeyDict(AbstractNormalizedDict):
         super(ModuloKeyDict, self).__init__(*args, **kwargs)
 
     def copy(self):
-        return type(self)(self.modulo, self.iteritems())
+        return type(self)(self.modulo, iter(self.items()))
 
     @property
     def modulo(self):

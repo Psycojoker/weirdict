@@ -2,7 +2,7 @@ from abc import abstractmethod
 from collections import MutableMapping, Mapping
 from .decorators import apply_keyfunc
 from functools import total_ordering
-from itertools import repeat, izip
+from itertools import repeat
 
 
 _SENTINEL = object()
@@ -32,15 +32,15 @@ class AbstractNormalizedDict(MutableMapping):
         if map_or_seq is _SENTINEL:
             args = []
         elif isinstance(map_or_seq, Mapping):
-            args = [((self.keyfunc(k), v) for k, v in map_or_seq.items())]
+            args = [((self.keyfunc(k), v) for k, v in list(map_or_seq.items()))]
         else: # sequence of two-tuples
             args = [((self.keyfunc(k), v) for k, v in map_or_seq)]
 
-        kwargs = {self.keyfunc(k): v for k, v in kwargs.iteritems()}
+        kwargs = {self.keyfunc(k): v for k, v in kwargs.items()}
         self._dict = dict(*args, **kwargs)
 
     def copy(self):
-        return type(self)(self.iteritems())
+        return type(self)(iter(self.items()))
 
     @apply_keyfunc
     def __getitem__(self, key):
@@ -56,7 +56,7 @@ class AbstractNormalizedDict(MutableMapping):
 
     @apply_keyfunc
     def has_key(self, key):
-        return self._dict.has_key(key)
+        return key in self._dict
 
     def __len__(self):
         return len(self._dict)
@@ -65,17 +65,17 @@ class AbstractNormalizedDict(MutableMapping):
         return iter(self._dict)
 
     def viewitems(self):
-        return self._dict.viewitems()
+        return self._dict.items()
 
     def viewkeys(self):
-        return self._dict.viewkeys()
+        return self._dict.keys()
 
     def viewvalues(self):
-        return self._dict.viewvalues()
+        return self._dict.values()
 
     @classmethod
     def fromkeys(cls, seq, value=None):
-        return cls(izip(seq, repeat(value)))
+        return cls(list(zip(seq, repeat(value))))
 
     def __cmp__(self, other):
         return cmp(self._dict, other)
